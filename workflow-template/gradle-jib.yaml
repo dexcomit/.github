@@ -1,0 +1,58 @@
+name: gradle-java-jib
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+      # Configure Workload Identity Federation via a credentials file.
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: projects/50512564251/locations/global/workloadIdentityPools/dv-us-gcp-sharedvpc-8q-pool/providers/non-prod-gh-provider
+          service_account: cloudrundeployer@p8-integrations-us-dev-2.iam.gserviceaccount.com
+          create_credentials_file: true
+      - uses: 'docker/login-action@v1'
+        with:
+          registry: 'gcr.io'
+          username: 'oauth2accesstoken'
+          password: '${{ steps.auth.outputs.access_token }}'
+      - name: SonarQube Scan
+        uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
+        with:
+          arguments: |
+            --info
+            -Dsonar.organization=${{ steps.org-name.outputs.value }}
+            -Dsonar.branch.name=${{ github.ref_name }}
+            -Dsonar.login=${{ secrets.SONARCLOUD_API_KEY }}
+            -Dsonar.host.url=${{ secrets.SONARCLOUD_HOST_URL }}
+            sonarqube -x test
+      - name: SonarQube Quality Gate Check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_API_KEY }}
+          SONAR_HOST_URL: ${{ secrets.SONARCLOUD_HOST_URL }}
+        with:
+          scanMetadataReportFile: build/sonar/report-task.txt
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
+        with:
+          arguments: build jib
