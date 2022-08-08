@@ -8,6 +8,6 @@
     ],
     "filePatterns": [
         "^Dockerfile",
-        ".*\\.md$"
+        "^README.md"
     ]
 }
