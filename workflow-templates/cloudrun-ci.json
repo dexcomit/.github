@@ -7,9 +7,5 @@
         "Java",
         "C#",
         "Python"
-    ],
-    "filePatterns": [
-        "^Dockerfile",
-        "^README.md"
     ]
 }
