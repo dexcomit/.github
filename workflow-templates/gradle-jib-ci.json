@@ -6,7 +6,6 @@
         "Java"
     ],
     "filePatterns": [
-        "^Dockerfile",
-        ".*\\.md$"
+        "^Dockerfile$"
     ]
 }
