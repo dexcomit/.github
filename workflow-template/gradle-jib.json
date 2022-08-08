@@ -1,0 +1,12 @@
+{
+    "name": "Gradle jib Workflow",
+    "description": "Dexcomit Organization gradle CI workflow.",
+    "iconName": "example-icon",
+    "categories": [
+        "Java"
+    ],
+    "filePatterns": [
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}
