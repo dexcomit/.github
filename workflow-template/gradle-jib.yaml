@@ -2,7 +2,7 @@ name: gradle-java-jib
 
 on:
   push:
-    branches: [ main ]
+    branches: [ $default-branch ]
 
 jobs:
   build:
