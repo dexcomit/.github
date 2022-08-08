@@ -4,7 +4,9 @@
     "categories": [
         "Go",
         "Javascript",
-        "Java"
+        "Java",
+        "C#",
+        "Python"
     ],
     "filePatterns": [
         "^Dockerfile",
