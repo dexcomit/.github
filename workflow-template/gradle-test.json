@@ -1,0 +1,12 @@
+{
+    "name": "Gradle test Workflow",
+    "description": "Dexcomit Organization gradle test CI workflow.",
+    "iconName": "example-icon",
+    "categories": [
+        "Java"
+    ],
+    "filePatterns": [
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}
