@@ -1,0 +1,15 @@
+{
+    "name": "CloudRun Workflow",
+    "description": "Dexcomit Organization CloudRun CI workflow.",
+    "iconName": "example-icon",
+    "categories": [
+        "Go",
+        "Javascript",
+        "Java"
+    ],
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}
