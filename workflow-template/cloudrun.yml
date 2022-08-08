@@ -1,0 +1,94 @@
+name: cloudrun-build
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - develop
+  push:
+    branches:
+      - develop
+  release:
+    types: [published]
+env:
+  App: subscriptions-europe-west3
+  Project: ecom
+  Region: europe-west3
+  VpcProjectId: dv-us-gcp-sharedvpc-8q
+  BuildProject: p8-integrations
+  ProjectId: it-ecom-eu-dv-d6da
+  DbConnectionSuffix: it-ecom-eu-dv-e19d41da
+  ServiceAccount: subscriptions-europe-west3
+
+jobs:
+  always:
+    name: always
+    runs-on: ubuntu-latest
+    steps:
+    # Check branch naming
+    - name: branchname
+      uses: deepakputhraya/action-branch-name@master
+      with:
+        # https://stackoverflow.com/questions/19322669/regular-expression-for-a-jira-identifier
+        # regex: '((?<!([A-Z]{1,10})-?)[A-Z]+-\d+)' # Regex the branch should match. This example enforces grouping
+        # allowed_prefixes: 'bugfix,feature,release,hotfix' # All branches should start with the given prefix
+        ignore: master,dev,prod # Ignore exactly matching branch names from convention
+        min_length: 5 # Min length of the branch name
+    # TODO: lint, sonar
+
+  setup-build-publish:
+    name: Setup, Build, Publish, Deploy-Dev
+    runs-on: ubuntu-latest
+    # Pull secrets from selected environment
+    environment: dev
+    if: ${{ github.event_name == 'push' }}
+
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - uses: 'actions/checkout@v2'
+
+    # Configure Workload Identity Federation via a credentials file.
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v0'
+      with:
+        #token_format: 'access_token'
+        workload_identity_provider: projects/50512564251/locations/global/workloadIdentityPools/dv-us-gcp-sharedvpc-8q-pool/providers/non-prod-gh-provider
+        service_account: cloudrundeployer@it-ecom-eu-dv-d6da.iam.gserviceaccount.com
+
+    # Install gcloud, `setup-gcloud` automatically picks up authentication from `auth`.
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v0'
+
+    # Build the Docker image
+    - name: Build & Publish
+      run: |
+        gcloud config set project $BuildProject
+        gcloud builds submit --tag gcr.io/$ProjectId/$Project/$App:${{ github.sha }}
+    - name: Deploy-Dev
+      run: |
+        gcloud run deploy $App \
+        --image gcr.io/$ProjectId/$Project/$App:${{ github.sha }} \
+        --platform managed \
+        --allow-unauthenticated \
+        --service-account $ServiceAccount@$ProjectId.iam.gserviceaccount.com \
+        --project $ProjectId \
+        --region $Region \
+        --set-env-vars PROJECT_TYPE='deploy' \
+        --set-env-vars CLOUD_SQL_INSTANCE_NAME='it-ecom-eu-dv-d6da:europe-west3:it-ecom-eu-dv-e19d41da' \
+        --set-env-vars DB_SOCKETPATH='/cloudsql/it-ecom-eu-dv-d6da:europe-west3:it-ecom-eu-dv-e19d41da' \
+        --set-env-vars PGUSER='admin' \
+        --set-env-vars PGDATABASE='dexcom_subscriptions' \
+        --set-env-vars PGHOST='/cloudsql/it-ecom-eu-dv-d6da:europe-west3:it-ecom-eu-dv-e19d41da' \
+        --set-env-vars DB_CONNECTION_LIMIT='5' \
+        --set-env-vars DB_TIMEOUT='3000' \
+        --set-env-vars GCP_PROJECTID='it-ecom-eu-dv-d6da' \
+        --set-env-vars GCP_REGION='europe-west3' \
+        --set-env-vars GCP_CLOUDRUN_URL='https://subscriptions-europe-west3-4v7ora5r7q-ey.a.run.app' \
+        --set-env-vars GCP_TASKS_QUEUE='Ecom-Subscriptions' \
+        --set-env-vars GCP_TASKS_SAEMAIL='subscriptions-europe-west3@it-ecom-eu-dv-d6da.iam.gserviceaccount.com' \
+        --set-secrets PGPASSWORD='sql_root_password:latest' \
+        --memory 512M
