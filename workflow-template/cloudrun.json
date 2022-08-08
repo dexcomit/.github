@@ -8,7 +8,6 @@
         "Java"
     ],
     "filePatterns": [
-        "package.json$",
         "^Dockerfile",
         ".*\\.md$"
     ]
