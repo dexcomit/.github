@@ -1,0 +1,119 @@
+name: Build
+# Trigger when the workflow is called from a different repository and get all of the inputs.
+on:
+  workflow_call:
+    inputs:
+      componentName:
+        required: true
+        type: string
+      componentBaseVersion:
+        required: true
+        type: string
+      gradle-version:
+        required: false
+        type: string
+        default: 5.6.4
+      java-version:
+        required: false
+        default: 11
+        type: string
+jobs:
+  build:
+    name: Java Component Build
+    # The job needs to run on self-hosted runners to get the correct gcloud permissions
+    runs-on: [self-hosted, jmataja]
+    env:
+      SONAR_HOST_URL: https://sonarcloud.io
+      PCC_CONSOLE_URL: https://us-east1.cloud.twistlock.com/us-2-158319314
+      DOCKER_HOST: tcp://10.240.153.24:2375
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 
+          ref: ${{ github.ref_name }}
+      # Fetch the secrets from GCP Secret Manager
+      - id: 'secrets'
+        uses: 'google-github-actions/get-secretmanager-secrets@v0'
+        with:
+          secrets: |-
+            SONAR_TOKEN:dv-glb-gcp-devopstools-8q/sonarcloud-token-svc-acc
+            PCC_PASS:dv-glb-gcp-devopstools-8q/prisma-cloud
+            PCC_USER:dv-glb-gcp-devopstools-8q/prisma-cloud-username
+      # Setup Java, we use temurin releases at the moment
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: ${{ inputs.java-version }}
+      # Docker login - needed to push image to GCR
+      - name: Docker login
+        run: |
+          docker-credential-gcr configure-docker
+      # Save the repository and organization names to variables for use later on, github doesn't expose these in actions
+      - name: Fetch Repo Name
+        id: repo-name
+        run: echo "::set-output name=value::$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')"
+      - name: Fetch org name
+        id: org-name
+        run: echo "::set-output name=value::$(echo '${{ github.repository }}' | awk -F '/' '{print $1}')"
+      # TODO Check how we would deal with repeating tags because the build-numbers start at 1
+      # TODO check if explicit names and branch tags are required
+      # Generate an Image name following the same conventions we used in Jenkins
+      - name: Generate Image name
+        id: image-name
+        run: echo "::set-output name=value::gcr.io/p8-integrations/${{ inputs.componentName }}:${{ inputs.componentBaseVersion }}-ghaction-b${{ github.run_number }}"
+      # Run the gradle test
+      - name: Tests
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: ${{ inputs.gradle-version }}
+          arguments: |
+            test --info
+      # Run the sonarqube scan, we use the gradle action here instead of the offical sonar action because of issues with quality gate checking
+      - name: SonarQube Scan
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: ${{ inputs.gradle-version }}
+          arguments: |
+            --info
+            -Dsonar.host.url=${{ env.SONAR_HOST_URL }}
+            -Dsonar.organization=${{ steps.org-name.outputs.value }}
+            -Dsonar.branch.name=${{ github.ref_name }}
+            -Dsonar.projectKey=${{ steps.org-name.outputs.value }}_${{ steps.repo-name.outputs.value }}
+            -Dsonar.login=${{ steps.secrets.outputs.SONAR_TOKEN }}
+            sonarqube -x test
+      # Check the Quality Gate status to determine if the build should be stopped
+      - name: SonarQube Quality Gate check
+        id: sonarqube-quality-gate-check 
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        # Force to fail step after specific time
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ steps.secrets.outputs.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
+        with:
+          scanMetadataReportFile: build/sonar/report-task.txt
+      # Build the image with jib
+      - name: Build image
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: ${{ inputs.gradle-version }}
+          arguments: |
+            --info jibDockerBuild 
+            -Djib.container.labels=org.opencontainers.image.revision=${{ github.sha }} 
+            --image=${{ steps.image-name.outputs.value }}
+      # Scan the image for vulnerabilities and compliance issues
+      - name: Prisma Cloud image scan
+        run: |
+          twistcli images scan --docker-address ${{ env.DOCKER_HOST }} --address ${{ env.PCC_CONSOLE_URL }} --user ${{ steps.secrets.outputs.PCC_USER }} --password ${{ steps.secrets.outputs.PCC_PASS }} --details ${{ steps.image-name.outputs.value }}
+      # Push the image to GCR
+      - name: Push image
+        run: |
+          docker push ${{ steps.image-name.outputs.value }}
+      # Remove the image from the Docker VM machine that exposes the socket
+      - name: cleanup image
+        run: |
+          if docker image inspect ${{ steps.image-name.outputs.value }} > /dev/null 2>&1 ; then docker rmi ${{ steps.image-name.outputs.value }}; fi

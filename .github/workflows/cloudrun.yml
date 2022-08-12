@@ -1,0 +1,107 @@
+on:
+  workflow_call:
+    inputs:
+       App:
+        required: true
+        type: string
+       Purpose:
+        required: true
+        type: string
+       ProjectId:
+        required: true
+        type: string
+       DbConnection:
+        required: true
+        type: string
+       ServiceAccount:
+        required: true
+        type: string
+       Region:
+        required: true
+        type: string
+       VpcProjectId:
+        required: false
+        type: string
+        default: dv-us-gcp-sharedvpc-8q
+       BuildProjectId:
+        required: false
+        type: string
+        default: p8-integrations
+       WorkloadIdentityProvider:
+        required: false
+        type: string
+        default: projects/50512564251/locations/global/workloadIdentityPools/dv-us-gcp-sharedvpc-8q-pool/providers/non-prod-gh-provider
+       WorkloadIdentityServiceAccount:
+        required: false
+        type: string
+        default: cloudrundeployer@it-ecom-eu-dv-d6da.iam.gserviceaccount.com
+
+jobs:
+  always:
+    name: always
+    runs-on: ubuntu-latest
+    steps:
+    # Check branch naming
+    - name: branchname
+      uses: deepakputhraya/action-branch-name@master
+      with:
+        # https://stackoverflow.com/questions/19322669/regular-expression-for-a-jira-identifier
+        regex: '((?<!([A-Z]{1,10})-?)[A-Z]+-\d+)' # Regex the branch should match. This example enforces grouping
+        allowed_prefixes: 'bugfix,feature,release,hotfix' # All branches should start with the given prefix
+        ignore: master,dev,prod # Ignore exactly matching branch names from convention
+        min_length: 5 # Min length of the branch name
+
+  setup-build-publish:
+    name: Setup, Build, Publish, Deploy-Dev
+    runs-on: ubuntu-latest
+    # Pull secrets from selected environment
+    environment: dev
+    if: ${{ github.event_name == 'push' }}
+
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - uses: 'actions/checkout@v2'
+
+    # Configure Workload Identity Federation via a credentials file.
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v0'
+      with:
+        #token_format: 'access_token'
+        workload_identity_provider: $WorkloadIdentityProvider
+        service_account: $WorkloadIdentityServiceAccount
+
+    # Install gcloud, `setup-gcloud` automatically picks up authentication from `auth`.
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v0'
+
+    # Build the Docker image
+    - name: Build & Publish
+      run: |
+        gcloud config set project $BuildProjectId
+        gcloud builds submit --tag gcr.io/$BuildProjectId/$Purpose/$App:${{ github.sha }}
+    - name: Deploy-Dev
+      run: |
+        gcloud run deploy $App \
+        --image gcr.io/$BuildProjectId/$Purpose/$App:${{ github.sha }} \
+        --platform managed \
+        --allow-unauthenticated \
+        --service-account $ServiceAccount@$ProjectId.iam.gserviceaccount.com \
+        --project $ProjectId \
+        --region $Region \
+        --set-env-vars PROJECT_TYPE='deploy' \
+        --set-env-vars CLOUD_SQL_INSTANCE_NAME='$DbInstanceName' \
+        --set-env-vars DB_SOCKETPATH='/cloudsql/$DbInstanceName' \
+        --set-env-vars PGUSER='admin' \
+        --set-env-vars PGDATABASE='dexcom_subscriptions' \
+        --set-env-vars PGHOST='/cloudsql/$DbInstanceName' \
+        --set-env-vars DB_CONNECTION_LIMIT='5' \
+        --set-env-vars DB_TIMEOUT='3000' \
+        --set-env-vars GCP_PROJECTID='$ProjectId' \
+        --set-env-vars GCP_REGION='$Region' \
+        --set-secrets PGPASSWORD='sql_root_password:latest' \
+        --memory 512M
