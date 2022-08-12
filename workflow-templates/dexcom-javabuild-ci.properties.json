@@ -1,0 +1,11 @@
+{
+    "name": "Dexcom Java Build Workflow",
+    "description": "Dexcomit Organization Java Build CI workflow.",
+    "iconName": "example-icon",
+    "categories": [
+        "Java"
+    ],
+    "filePatterns": [
+        "^Dockerfile$"
+    ]
+}

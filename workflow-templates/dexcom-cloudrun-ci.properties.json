@@ -1,5 +1,5 @@
 {
-    "name": "CloudRun Workflow",
+    "name": "Dexcom CloudRun Workflow",
     "description": "Dexcomit Organization CloudRun CI workflow.",
     "categories": [
         "Go",
