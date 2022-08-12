@@ -1,0 +1,10 @@
+{
+    "name": "Dexcom Terraform Module CI Workflow",
+    "description": "Dexcom Terraform Module CI starter workflow.",
+    "categories": [
+        "Terraform"
+    ],
+    "filePatterns": [
+        ".*\\.tf$"
+    ]
+}

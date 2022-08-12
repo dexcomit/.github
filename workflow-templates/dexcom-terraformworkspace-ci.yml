@@ -1,4 +1,4 @@
-name: dexcom-tfworkspace-ci
+name: dexcom-terraformworkspace-ci
 
 on:
   push:
@@ -9,4 +9,4 @@ jobs:
   build:
     runs-on: [Organization self-hosted, linux, x64]
     steps:
-      - uses: ../.github/workflows/tfworkspace
+      - uses: ../.github/workflows/terraformworkspace
