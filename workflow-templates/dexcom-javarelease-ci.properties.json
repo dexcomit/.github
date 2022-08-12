@@ -1,7 +1,6 @@
 {
     "name": "Dexcom Java Release Workflow",
     "description": "Dexcomit Organization Java Release CI workflow.",
-    "iconName": "example-icon",
     "categories": [
         "Java"
     ],
