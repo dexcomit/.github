@@ -99,7 +99,7 @@ jobs:
         --set-env-vars PGHOST='/cloudsql/${{ inputs.DbInstanceName }}' \
         --set-env-vars DB_CONNECTION_LIMIT='5' \
         --set-env-vars DB_TIMEOUT='3000' \
-        --set-env-vars GCP_PROJECTID='$ProjectId' \
+        --set-env-vars GCP_PROJECTID='${{ inputs.ProjectId }}' \
         --set-env-vars GCP_REGION='${{ inputs.Region}}' \
         --set-env-vars PGUSER='admin' \
         --set-env-vars PGDATABASE='dexcom_subscriptions' \
