@@ -82,7 +82,7 @@ jobs:
     # Build the Docker image
     - name: Build & Publish
       run: |
-        gcloud config set project $BuildProjectId
+        gcloud config set project ${{ inputs.BuildProjectId }}
         gcloud builds submit --tag gcr.io/${{ inputs.BuildProjectId }}/${{ inputs.Purpose }}/${{ inputs.App }}:${{ github.sha }}
     - name: Deploy-Dev
       run: |
@@ -90,7 +90,7 @@ jobs:
         --image gcr.io/$BuildProjectId/$Purpose/$App:${{ github.sha }} \
         --platform managed \
         --allow-unauthenticated \
-        --service-account ${{ inputs.ServiceAccount }}@$ProjectId.iam.gserviceaccount.com \
+        --service-account ${{ inputs.ServiceAccount }}@${{ inputs.ProjectId }}.iam.gserviceaccount.com \
         --project ${{ inputs.ProjectId }} \
         --region ${{ inputs.Region }} \
         --set-env-vars PROJECT_TYPE='deploy' \
