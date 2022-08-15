@@ -2,9 +2,9 @@ on:
   workflow_call:
 
 jobs:
+  runs-on: [Organization self-hosted, linux, x64]
   terraform:
     name: "TerraformModule"
-    runs-on: ubuntu-latest
     steps:
       - name: branchname
         uses: deepakputhraya/action-branch-name@master
