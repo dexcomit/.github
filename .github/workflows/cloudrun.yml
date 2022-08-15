@@ -19,6 +19,10 @@ on:
        Region:
         required: true
         type: string
+       WorkloadIdentityServiceAccount:
+        required: false
+        type: string
+        default: cloudrundeployer@p8-integrations.iam.gserviceaccount.com
        VpcProjectId:
         required: false
         type: string
@@ -31,10 +35,6 @@ on:
         required: false
         type: string
         default: projects/50512564251/locations/global/workloadIdentityPools/dv-us-gcp-sharedvpc-8q-pool/providers/non-prod-gh-provider
-       WorkloadIdentityServiceAccount:
-        required: false
-        type: string
-        default: cloudrundeployer@it-ecom-eu-dv-d6da.iam.gserviceaccount.com
 
 jobs:
   always:
@@ -86,7 +86,7 @@ jobs:
         gcloud builds submit --tag gcr.io/${{ inputs.BuildProjectId }}/${{ inputs.Purpose }}/${{ inputs.App }}:${{ github.sha }}
     - name: Deploy-Dev
       run: |
-        gcloud run deploy $App \
+        gcloud run deploy ${{ inputs.App }} \
         --image gcr.io/$BuildProjectId/$Purpose/$App:${{ github.sha }} \
         --platform managed \
         --allow-unauthenticated \
