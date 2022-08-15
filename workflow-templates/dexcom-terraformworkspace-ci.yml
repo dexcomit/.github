@@ -1,12 +1,14 @@
 name: dexcom-terraformworkspace-ci
 
 on:
-  push:
-    branches: [ $default-branch ]
   pull_request:
+    branches:
+      - $default-branch
+  push:
+    branches:
+      - $default-branch
 
 jobs:
   build:
-    runs-on: [Organization self-hosted, linux, x64]
     steps:
-      - uses: ../.github/workflows/terraformworkspace
+      - uses:  dexcomit/.github/.github/workflows/terraformworkspace.yml@master
