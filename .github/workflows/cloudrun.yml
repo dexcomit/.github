@@ -37,9 +37,9 @@ on:
         default: projects/50512564251/locations/global/workloadIdentityPools/dv-us-gcp-sharedvpc-8q-pool/providers/non-prod-gh-provider
 
 jobs:
+  runs-on: [Organization self-hosted, linux, x64]
   always:
     name: always
-    runs-on: ubuntu-latest
     steps:
     # Check branch naming
     - name: branchname
@@ -53,7 +53,6 @@ jobs:
 
   setup-build-publish:
     name: Setup, Build, Publish, Deploy-Dev
-    runs-on: ubuntu-latest
     # Pull secrets from selected environment
     environment: dev
     if: ${{ github.event_name == 'push' }}
