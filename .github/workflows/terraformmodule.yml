@@ -2,8 +2,8 @@ on:
   workflow_call:
 
 jobs:
-  runs-on: [Organization self-hosted, linux, x64]
-  terraform:
+  terraform:  
+    runs-on: [self-hosted, linux, x64]
     name: "TerraformModule"
     steps:
       - name: branchname
