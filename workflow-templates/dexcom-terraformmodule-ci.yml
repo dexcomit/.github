@@ -2,11 +2,10 @@ name: dexcom-terraformmodule-ci
 
 on:
   push:
-    branches: [ $default-branch ]
+    branches: $default-branch
   pull_request:
+    branches: $default-branch
 
 jobs:
-  build:
-    runs-on: [Organization self-hosted, linux, x64]
-    steps:
-      - uses: ../.github/workflows/terraformmodule
+  terraformmodule:
+    uses: ../.github/workflows/terraformmodule
