@@ -10,6 +10,7 @@ on:
 
 jobs:
   cloudrun:
+    runs-on: [Organization self-hosted, linux, x64]
     steps:
       uses: dexcomit/.github/.github/workflows/cloudrun.yml@master
       with:
