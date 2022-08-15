@@ -72,8 +72,8 @@ jobs:
       uses: 'google-github-actions/auth@v0'
       with:
         #token_format: 'access_token'
-        workload_identity_provider: $WorkloadIdentityProvider
-        service_account: $WorkloadIdentityServiceAccount
+        workload_identity_provider: ${{ inputs.WorkloadIdentityProvider }}
+        service_account: ${{ inputs.WorkloadIdentityServiceAccount }}
 
     # Install gcloud, `setup-gcloud` automatically picks up authentication from `auth`.
     - name: 'Set up Cloud SDK'
@@ -83,25 +83,25 @@ jobs:
     - name: Build & Publish
       run: |
         gcloud config set project $BuildProjectId
-        gcloud builds submit --tag gcr.io/$BuildProjectId/$Purpose/$App:${{ github.sha }}
+        gcloud builds submit --tag gcr.io/${{ inputs.BuildProjectId }}/${{ inputs.Purpose }}/${{ inputs.App }}:${{ github.sha }}
     - name: Deploy-Dev
       run: |
         gcloud run deploy $App \
         --image gcr.io/$BuildProjectId/$Purpose/$App:${{ github.sha }} \
         --platform managed \
         --allow-unauthenticated \
-        --service-account $ServiceAccount@$ProjectId.iam.gserviceaccount.com \
-        --project $ProjectId \
-        --region $Region \
+        --service-account ${{ inputs.ServiceAccount }}@$ProjectId.iam.gserviceaccount.com \
+        --project ${{ inputs.ProjectId }} \
+        --region ${{ inputs.Region }} \
         --set-env-vars PROJECT_TYPE='deploy' \
-        --set-env-vars CLOUD_SQL_INSTANCE_NAME='$DbInstanceName' \
-        --set-env-vars DB_SOCKETPATH='/cloudsql/$DbInstanceName' \
-        --set-env-vars PGUSER='admin' \
-        --set-env-vars PGDATABASE='dexcom_subscriptions' \
-        --set-env-vars PGHOST='/cloudsql/$DbInstanceName' \
+        --set-env-vars CLOUD_SQL_INSTANCE_NAME='${{ inputs.DbInstanceName }}' \
+        --set-env-vars DB_SOCKETPATH='/cloudsql/${{ inputs.DbInstanceName }}' \
+        --set-env-vars PGHOST='/cloudsql/${{ inputs.DbInstanceName }}' \
         --set-env-vars DB_CONNECTION_LIMIT='5' \
         --set-env-vars DB_TIMEOUT='3000' \
         --set-env-vars GCP_PROJECTID='$ProjectId' \
-        --set-env-vars GCP_REGION='$Region' \
+        --set-env-vars GCP_REGION='${{ inputs.Region}}' \
+        --set-env-vars PGUSER='admin' \
+        --set-env-vars PGDATABASE='dexcom_subscriptions' \
         --set-secrets PGPASSWORD='sql_root_password:latest' \
         --memory 512M
