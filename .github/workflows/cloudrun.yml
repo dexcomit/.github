@@ -37,8 +37,8 @@ on:
         default: projects/50512564251/locations/global/workloadIdentityPools/dv-us-gcp-sharedvpc-8q-pool/providers/non-prod-gh-provider
 
 jobs:
-  runs-on: [Organization self-hosted, linux, x64]
   always:
+    runs-on: [self-hosted, linux, x64]
     name: always
     steps:
     # Check branch naming
