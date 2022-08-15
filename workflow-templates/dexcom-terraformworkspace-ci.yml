@@ -9,6 +9,5 @@ on:
       - $default-branch
 
 jobs:
-  build:
-    steps:
-      - uses:  dexcomit/.github/.github/workflows/terraformworkspace.yml@master
+  cloudrun:
+    uses: dexcomit/.github/.github/workflows/terraformworkspace.yml@master
