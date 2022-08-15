@@ -87,7 +87,7 @@ jobs:
     - name: Deploy-Dev
       run: |
         gcloud run deploy ${{ inputs.App }} \
-        --image gcr.io/$BuildProjectId/$Purpose/$App:${{ github.sha }} \
+        --image gcr.io/${{ inputs.BuildProjectId }}/${{ inputs.Purpose }}/${{ inputs.App }}:${{ github.sha }} \
         --platform managed \
         --allow-unauthenticated \
         --service-account ${{ inputs.ServiceAccount }}@${{ inputs.ProjectId }}.iam.gserviceaccount.com \
