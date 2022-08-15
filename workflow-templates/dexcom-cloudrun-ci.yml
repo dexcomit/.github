@@ -3,25 +3,23 @@ name: dexcom-cloudrun-ci
 on:
   pull_request:
     branches:
-      - [ $default-branch ]
+      - $default-branch
   push:
     branches:
-      - [ $default-branch ]
+      - $default-branch
 
 jobs:
-  build:
-    runs-on: [Organization self-hosted, linux, x64]
+  cloudrun:
     steps:
-      - uses: ../.github/workflows/cloudrun
-        with:
-          App: subscriptions-europe-west3
-          Purpose: ecom
-          ProjectId: it-ecom-eu-dv-d6da
-          Region: europe-west3
-          DbConnection: it-ecom-eu-dv-e19d41da:europe-west3:it-ecom-eu-dv-e19d41da
-          ServiceAccount: subscriptions-europe-west3
-          #VpcProjectId: dv-us-gcp-sharedvpc-8q
-          #BuildProject: p8-integrations
-          #DbConnectionSuffix: it-ecom-eu-dv-e19d41da
-          #WorkloadIdentityProvider: projects/50512564251/locations/global/workloadIdentityPools/dv-us-gcp-sharedvpc-8q-pool/providers/non-prod-gh-provider
-          #WorkloadIdentityServiceAccount: cloudrundeployer@it-ecom-eu-dv-d6da.iam.gserviceaccount.com
+      uses: dexcomit/.github/.github/workflows/cloudrun.yml@master
+      with:
+        App: subscriptions-europe-west3
+        Purpose: ecom
+        ProjectId: it-ecom-eu-dv-d6da
+        Region: europe-west3
+        DbConnection: it-ecom-eu-dv-e19d41da:europe-west3:it-ecom-eu-dv-e19d41da
+        ServiceAccount: subscriptions-europe-west3
+        WorkloadIdentityServiceAccount: cloudrundeployer@it-ecom-eu-dv-d6da.iam.gserviceaccount.com
+        #VpcProjectId: dv-us-gcp-sharedvpc-8q
+        #BuildProject: p8-integrations
+        #WorkloadIdentityProvider: projects/50512564251/locations/global/workloadIdentityPools/dv-us-gcp-sharedvpc-8q-pool/providers/non-prod-gh-provider
