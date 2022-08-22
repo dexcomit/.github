@@ -10,7 +10,7 @@ on:
 
 jobs:
   cloudrun:
-    uses: dexcomit/.github/.github/workflows/cloudrun.yml@master
+    uses: dexcomit/github-workflows/.github/workflows/cloudrun.yml@master
     with:
       App: subscriptions-europe-west3
       Purpose: ecom

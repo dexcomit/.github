@@ -8,4 +8,4 @@ on:
 
 jobs:
   terraformmodule:
-    uses: dexcomit/.github/.github/workflows/terraformmodule.yml@master
+    uses: dexcomit/github-workflows/.github/workflows/terraformmodule.yml@master

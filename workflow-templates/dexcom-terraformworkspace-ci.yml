@@ -10,4 +10,4 @@ on:
 
 jobs:
   terraformworkspace:
-    uses: dexcomit/.github/.github/workflows/terraformworkspace.yml@master
+    uses: dexcomit/github-workflows/.github/workflows/terraformworkspace.yml@master

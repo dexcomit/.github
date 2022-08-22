@@ -1,4 +1,4 @@
-name: gradle-java-jib
+name: dexcom-java-build
 
 on:
   push:
@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: [Organization self-hosted, linux, x64]
     steps:
-      - uses: ../.github/workflows/java-component-build
+      - uses: dexcomit/github-workflows/.github/workflows/java-component-build@master
         with:
           componentName: it-procurementbill
           componentBaseVersion: 1.0.0
