@@ -1,0 +1,11 @@
+{
+    "name": "Dexcom CloudFunction Workflow",
+    "description": "Dexcomit Organization CloudFunction CI workflow.",
+    "categories": [
+        "Go",
+        "Javascript",
+        "Java",
+        "C#",
+        "Python"
+    ]
+}

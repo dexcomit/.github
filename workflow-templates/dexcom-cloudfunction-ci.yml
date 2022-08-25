@@ -1,0 +1,24 @@
+name: cloudfunction
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    tags:
+    branches:
+      - master
+  release:
+    types: [published]
+
+jobs:
+  cloudfunction:
+    uses: dexcomit/github-workflows/.github/workflows/cloudfunction.yml@master
+    with:
+      App: dpspipelines
+      EntryPoint: dpspipelines
+      Region: us-central1
+      ServiceAccount: dpspipelines@pd-us-gcp-dvo-8q.iam.gserviceaccount.com
+      #ProjectId: pd-us-gcp-dvo-8q
+      #WLIProvider: projects/50512564251/locations/global/workloadIdentityPools/dv-us-gcp-sharedvpc-8q-pool/providers/non-prod-gh-provider
+
