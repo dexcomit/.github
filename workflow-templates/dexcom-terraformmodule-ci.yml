@@ -1,4 +1,4 @@
-name: dexcom-terraformmodule-ci
+name: terraformmodule
 
 on:
   push:

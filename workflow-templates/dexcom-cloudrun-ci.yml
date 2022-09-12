@@ -1,9 +1,8 @@
-name: dexcom-cloudrun-ci
+name: cloudrun
 
 on:
   pull_request:
     branches:
-      - $default-branch
   push:
     branches:
       - $default-branch
@@ -12,13 +11,21 @@ jobs:
   cloudrun:
     uses: dexcomit/github-workflows/.github/workflows/cloudrun.yml@master
     with:
-      App: subscriptions-europe-west3
+      App: subscriptions-us-west2
       Purpose: ecom
-      ProjectId: it-ecom-eu-dv-d6da
-      Region: europe-west3
-      DbConnection: it-ecom-eu-dv-e19d41da:europe-west3:it-ecom-eu-dv-e19d41da
+      Region:us-west2
+      DbInstanceName: it-ecom-eu-dv-e19d41da:europe-west3:it-ecom-eu-dv-e19d41da
       ServiceAccount: subscriptions-europe-west3
-      WorkloadIdentityServiceAccount: cloudrundeployer@it-ecom-eu-dv-d6da.iam.gserviceaccount.com
+
+      # ProdIT default
+      #WorkloadIdentityServiceAccount: serverlessdeployer@pd-us-gcp-dvo-8q.iam.gserviceaccount.com
+      #ProjectId: pd-us-gcp-dvo-8q
+      #VpcProjectId: pd-us-gcp-dvo-8q
+
+      # example sharedvpc service project ecom
+      #WorkloadIdentityServiceAccount: cloudrundeployer@p8-integrations.iam.gserviceaccount.com
+      #ProjectId: it-ecom-eu-dv-d6da
       #VpcProjectId: dv-us-gcp-sharedvpc-8q
+
       #BuildProject: p8-integrations
       #WorkloadIdentityProvider: projects/50512564251/locations/global/workloadIdentityPools/dv-us-gcp-sharedvpc-8q-pool/providers/non-prod-gh-provider

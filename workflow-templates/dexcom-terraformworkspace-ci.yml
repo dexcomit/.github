@@ -1,4 +1,4 @@
-name: dexcom-terraformworkspace-ci
+name: terraformworkspace
 
 on:
   push:
