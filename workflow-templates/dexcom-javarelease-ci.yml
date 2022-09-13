@@ -6,10 +6,9 @@ on:
 
 jobs:
   build:
-    runs-on: [self-hosted, linux, x64]
-    steps:
-      - uses: dexcomit/github-workflows/.github/workflows/java-library-release.yml@master
-        with:
-          componentName: 'it-jenkins-java-library-pipeline-experiment'
-          #gradle-version: 5.6.4
-          #java-version: 8
+    name: Java Library Release
+    uses: dexcomit/github-workflows/.github/workflows/java-library-release.yml@master
+    with:
+      componentName: 'it-jenkins-java-library-pipeline-experiment'
+      #gradle-version: 5.6.4
+      #java-version: 8
