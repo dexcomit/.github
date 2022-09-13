@@ -3,8 +3,5 @@
     "description": "Dexcomit Organization Java Build CI workflow.",
     "categories": [
         "Java"
-    ],
-    "filePatterns": [
-        "^Dockerfile$"
     ]
 }

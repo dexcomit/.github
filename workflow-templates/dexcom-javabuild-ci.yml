@@ -6,11 +6,11 @@ on:
 
 jobs:
   build:
-    runs-on: [Organization self-hosted, linux, x64]
+    runs-on: [self-hosted, linux, x64]
     steps:
-      - uses: dexcomit/github-workflows/.github/workflows/java-component-build@master
+      - uses: dexcomit/github-workflows/.github/workflows/java-component-build.yml@master
         with:
-          componentName: it-procurementbill
-          componentBaseVersion: 1.0.0
+          componentName: 'it-jenkins-java-component-pipeline-experiment'
+          componentBaseVersion: '3.0.0'
           #gradle-version: 5.6.4
-          #java-version: 11
+          #java-version: 8
