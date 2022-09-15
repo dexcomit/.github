@@ -1,6 +1,6 @@
 {
-    "name": "Dexcom Java Component Build Workflow",
-    "description": "Dexcomit Organization Java Build CI workflow. This creates a Docker image of the Java Component.",
+    "name": "Dexcom Java Component Test Workflow",
+    "description": "Dexcomit Organization Java Test CI workflow. This tests the Java Component on branch commits and doesn't publish images.",
     "categories": [
         "Java"
     ]

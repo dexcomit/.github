@@ -1,6 +1,6 @@
 {
     "name": "Dexcom Java Component Build Workflow",
-    "description": "Dexcomit Organization Java Build CI workflow. This creates a Docker image of the Java Component.",
+    "description": "Dexcomit Organization Java Component Build CI workflow. This creates a Docker image of the Java Component from commits to the master branch.",
     "categories": [
         "Java"
     ]
