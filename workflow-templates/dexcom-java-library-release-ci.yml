@@ -1,0 +1,19 @@
+name: dexcom-java-library-release-ci
+
+on:
+  push:
+    branches: [ $default-branch ]
+    paths-ignore:
+      - 'harness-deploy/**'
+      - 'README.md'
+      - '.github/**'
+      - '.gitignore'
+
+jobs:
+  release:
+    name: Java Library Release
+    uses: dexcomit/github-workflows/.github/workflows/java-library-release.yml@master
+    with:
+      componentName: 'it-jenkins-java-library-pipeline-experiment'
+      #gradle-version: 5.6.4
+      #java-version: 8

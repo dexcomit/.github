@@ -1,8 +1,8 @@
-name: dexcom-java-component-build-ci
+name: dexcom-java-component-test-ci
 
 on:
   push:
-    branches: [ $default-branch ]
+    branches-ignore: [ $default-branch ]
     paths-ignore:
       - 'harness-deploy/**'
       - 'README.md'
@@ -10,9 +10,9 @@ on:
       - '.gitignore'
 
 jobs:
-  build:
-    name: Java Component Build
-    uses: dexcomit/github-workflows/.github/workflows/java-component-build.yml@master
+  test:
+    name: Java Component Test
+    uses: dexcomit/github-workflows/.github/workflows/java-component-tests.yml@master
     with:
       componentName: 'it-jenkins-java-component-pipeline-experiment'
       componentBaseVersion: '3.0.0'

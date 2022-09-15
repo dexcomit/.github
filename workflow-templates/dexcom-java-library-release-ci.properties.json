@@ -1,0 +1,7 @@
+{
+    "name": "Dexcom Java Library Release Workflow",
+    "description": "Dexcomit Organization Java Library Release CI workflow. This publishes a Java Library.",
+    "categories": [
+        "Java"
+    ]
+}

@@ -1,0 +1,7 @@
+{
+    "name": "Dexcom Java Library Test Workflow",
+    "description": "Dexcomit Organization Java Library Test CI workflow. This runs unit tests for a Java Library on branch commits.",
+    "categories": [
+        "Java"
+    ]
+}

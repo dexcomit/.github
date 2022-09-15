@@ -1,0 +1,19 @@
+name: dexcom-java-library-test-ci
+
+on:
+  push:
+    branches-ignore: [ $default-branch ]
+    paths-ignore:
+      - 'harness-deploy/**'
+      - 'README.md'
+      - '.github/**'
+      - '.gitignore'
+
+jobs:
+  test:
+    name: Java Library Test
+    uses: dexcomit/github-workflows/.github/workflows/java-library-test.yml@master
+    with:
+      componentName: 'it-jenkins-java-library-pipeline-experiment'
+      #gradle-version: 5.6.4
+      #java-version: 8
