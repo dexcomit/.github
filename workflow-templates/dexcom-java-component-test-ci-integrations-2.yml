@@ -1,0 +1,15 @@
+name: dexcom-java-component-test-ci-integrations-2
+
+on:
+  push:
+    branches-ignore: [ $default-branch ]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Java Component Test
+    uses: dexcomit/github-workflows/.github/workflows/java-component-tests-integrations-2.yml@master
+    with:
+      #gradle-version: 7.5.1
+      #java-version: 17
