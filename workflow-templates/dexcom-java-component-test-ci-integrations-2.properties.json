@@ -1,0 +1,7 @@
+{
+    "name": "Dexcom Java Component Test for Integrations 2.0 Workflow",
+    "description": "Dexcomit Organization Java Test CI workflow. This tests all of the Java Components in the repo on branch commits and doesn't publish images.",
+    "categories": [
+        "Java"
+    ]
+}

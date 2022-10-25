@@ -1,0 +1,7 @@
+{
+    "name": "Dexcom Java Component Build for Integrations 2.0 Workflow",
+    "description": "Dexcomit Organization Java Component Build CI workflow. This creates a Docker image of one of the Java Components from a directory in the main branch. You need one workflow per Java Component/Microservice.",
+    "categories": [
+        "Java"
+    ]
+}
