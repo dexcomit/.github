@@ -6,8 +6,7 @@ on:
     branches: [ $default-branch ]
 # Edit the paths to contain the directory of the component and the directories for all of its dependencies in the repo.
     paths:
-      - 'account-cams-sink/**'
-      - 'account-mdm-domain/**'
+      - 'folder_name/**'
   workflow_dispatch:
 
 jobs:
@@ -15,6 +14,7 @@ jobs:
     name: Java Component Build
     uses: dexcomit/github-workflows/.github/workflows/java-component-build-integrations-2.yml@master
     with:
-      componentName: 'account-cams-sink'
+      componentName: 'enter_component_name_here'
+      imageName: 'enter_image_name_here'
       #gradle-version: 7.5.1
       #java-version: 17
