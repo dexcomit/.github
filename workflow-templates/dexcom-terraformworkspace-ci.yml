@@ -9,3 +9,4 @@ on:
 jobs:
   terraformworkspace:
     uses: dexcomit/github-workflows/.github/workflows/terraformworkspace.yml@master
+    secrets: inherit
