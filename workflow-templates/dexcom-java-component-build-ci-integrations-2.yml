@@ -4,7 +4,7 @@ name: dexcom-java-component-build-ci-integrations-2
 on:
   push:
     branches: [ $default-branch ]
-# Edit the paths to contain the directory of the component and the directories for all of its dependencies in the repo.
+    # Edit the paths to contain the directory of the component and the directories for all of its dependencies in the repo.
     paths:
       - 'folder_name/**'
   workflow_dispatch:
@@ -16,5 +16,6 @@ jobs:
     with:
       componentName: 'enter_component_name_here'
       imageName: 'enter_image_name_here'
+      componentBaseVersion: '1.0.0'
       #gradle-version: 7.5.1
       #java-version: 17

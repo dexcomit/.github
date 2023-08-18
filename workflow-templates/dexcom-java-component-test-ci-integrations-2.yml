@@ -1,9 +1,12 @@
+#Change the name here to the component name
 name: dexcom-java-component-test-ci-integrations-2
 
 on:
   push:
     branches-ignore: [ $default-branch ]
-    types: [opened, synchronize, reopened]
+    # Edit the paths to contain the directory of the component and the directories for all of its dependencies in the repo.
+    paths:
+      - 'folder_name/**'
   workflow_dispatch:
 
 jobs:
@@ -11,5 +14,6 @@ jobs:
     name: Java Component Test
     uses: dexcomit/github-workflows/.github/workflows/java-component-tests-integrations-2.yml@master
     with:
+      componentName: 'enter_component_name_here'
       #gradle-version: 7.5.1
       #java-version: 17

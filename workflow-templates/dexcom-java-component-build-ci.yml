@@ -1,3 +1,4 @@
+#Change the name here to the component name
 name: dexcom-java-component-build-ci
 
 on:
@@ -8,6 +9,7 @@ on:
       - 'README.md'
       - '.github/**'
       - '.gitignore'
+      - 'deploy/**'
   workflow_dispatch:
 
 jobs:
@@ -15,7 +17,7 @@ jobs:
     name: Java Component Build
     uses: dexcomit/github-workflows/.github/workflows/java-component-build.yml@master
     with:
-      componentName: 'it-jenkins-java-component-pipeline-experiment'
-      componentBaseVersion: '3.0.0'
+      componentName: 'enter_component_name_here'
+      componentBaseVersion: '1.0.0'
       #gradle-version: 5.6.4
       #java-version: 8

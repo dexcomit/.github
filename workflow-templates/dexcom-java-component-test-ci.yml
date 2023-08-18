@@ -1,3 +1,4 @@
+#Change the name here to the component name
 name: dexcom-java-component-test-ci
 
 on:
@@ -8,6 +9,7 @@ on:
       - 'README.md'
       - '.github/**'
       - '.gitignore'
+      - 'deploy/**'
   workflow_dispatch:
 
 jobs:
@@ -15,7 +17,6 @@ jobs:
     name: Java Component Test
     uses: dexcomit/github-workflows/.github/workflows/java-component-tests.yml@master
     with:
-      componentName: 'it-jenkins-java-component-pipeline-experiment'
-      componentBaseVersion: '3.0.0'
+      componentName: 'enter_component_name_here'
       #gradle-version: 5.6.4
       #java-version: 8
