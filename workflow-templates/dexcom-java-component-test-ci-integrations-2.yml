@@ -13,6 +13,7 @@ jobs:
   test:
     name: Java Component Test
     uses: dexcomit/github-workflows/.github/workflows/java-component-tests-integrations-2.yml@master
+    secrets: inherit
     with:
       componentName: 'enter_component_name_here'
       #gradle-version: 7.5.1

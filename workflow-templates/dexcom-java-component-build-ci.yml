@@ -16,6 +16,7 @@ jobs:
   build:
     name: Java Component Build
     uses: dexcomit/github-workflows/.github/workflows/java-component-build.yml@master
+    secrets: inherit
     with:
       componentName: 'enter_component_name_here'
       componentBaseVersion: '1.0.0'
