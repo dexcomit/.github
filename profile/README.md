@@ -1,12 +1,9 @@
 ## dexcomit github
 
-<!--
+Welcome to the DexcomIT GitHub. 
 
-**Here are some ideas to get you started:**
+### gitops handbook
+For specific information about using Git and guidelines specific to our organization, checkout the [gitops handbook](https://dexcom.roadie.so/docs/default/component/gitops-handbook/).
 
-🙋‍♀️ A short introduction - what is your organization all about?
-🌈 Contribution guidelines - how can the community get involved?
-👩‍💻 Useful resources - where can the community find your docs? Is there anything else the community should know?
-🍿 Fun facts - what does your team eat for breakfast?
-🧙 Remember, you can do mighty things with the power of [Markdown](https://docs.github.com/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
--->
+### repository creation
+IMPORTANT: To create a new repository use the [creation wizard](https://dexcom.roadie.so/create/templates/default/create-from-githubtemplate). For a walkthrough of the new process, refer to [this documentation](https://dexcom.roadie.so/docs/default/component/gitops-handbook/repos/creating/). If you have any questions, please reach out to Natalie Brooks via [email](mailto:natalie.brooks@dexcom.com) or Teams.
