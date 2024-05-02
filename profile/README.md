@@ -2,6 +2,8 @@
 
 Welcome to the DexcomIT GitHub. 
 
+For upcoming changes to organization administration/settings, please check the [change notification page](https://dexcom.roadie.so/docs/default/component/gitops-handbook/administration/change-notifications/).
+
 ### gitops handbook
 For specific information about using Git and guidelines specific to our organization, checkout the [gitops handbook](https://dexcom.roadie.so/docs/default/component/gitops-handbook/).
 
